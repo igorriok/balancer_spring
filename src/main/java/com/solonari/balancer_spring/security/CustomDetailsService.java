@@ -3,7 +3,6 @@ package com.solonari.balancer_spring.security;
 import com.solonari.balancer_spring.dao.UserDao;
 import com.solonari.balancer_spring.dto.EmailPassword;
 import com.solonari.balancer_spring.entities.UserEntity;
-import net.bytebuddy.matcher.ElementMatcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +12,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -26,7 +26,9 @@ public class CustomDetailsService implements UserDetailsService {
 	
 	//@Autowired
 	private final UserDao userDao;
+	private final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 	
+	@Autowired
 	public CustomDetailsService(UserDao userDao) {
 		this.userDao = userDao;
 	}
@@ -39,7 +41,8 @@ public class CustomDetailsService implements UserDetailsService {
 		grantedAuthoritiesList.add(new SimpleGrantedAuthority("User"));
 		
 		try {
-			userEntity = userDao.findFirstByUsername(username);
+			userEntity = userDao.findFirstByEmail(username);
+			log.info("User Entity: {}", userEntity);
 			return new User(userEntity.username, userEntity.password, grantedAuthoritiesList);
 			
 		} catch (Exception e) {
@@ -55,7 +58,8 @@ public class CustomDetailsService implements UserDetailsService {
 		
 		if (!userDao.existsByEmail(emailPassword.email)) {
 			
-			userDao.save(new UserEntity(emailPassword.email, emailPassword.password));
+			userDao.save(new UserEntity(emailPassword.email.substring(0, emailPassword.email.indexOf("@")),
+					emailPassword.email, bCryptPasswordEncoder.encode(emailPassword.password)));
 			
 			return ResponseEntity.ok("Saved");
 		} else {

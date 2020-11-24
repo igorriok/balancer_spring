@@ -17,10 +17,16 @@ import java.io.IOException;
 
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
+	
+	
+	private final CustomDetailsService userDetailsService;
+	private final JwtTokenUtil jwtTokenUtil;
+	
 	@Autowired
-	private JwtUserDetailsService jwtUserDetailsService;
-	@Autowired
-	private JwtTokenUtil jwtTokenUtil;
+	public JwtRequestFilter(CustomDetailsService userDetailsService, JwtTokenUtil jwtTokenUtil) {
+		this.userDetailsService = userDetailsService;
+		this.jwtTokenUtil = jwtTokenUtil;
+	}
 	
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
@@ -48,7 +54,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 		
 		// Once we get the token validate it.
 		if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-			UserDetails userDetails = this.jwtUserDetailsService.loadUserByUsername(username);
+			UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
 			// if token is valid configure Spring Security to manually set
 			// authentication
 			if (jwtTokenUtil.validateToken(jwtToken, userDetails)) {

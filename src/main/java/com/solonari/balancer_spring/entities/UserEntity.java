@@ -1,8 +1,5 @@
 package com.solonari.balancer_spring.entities;
 
-
-
-
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -36,11 +33,6 @@ public class UserEntity implements Serializable {
 	
 	
 	public UserEntity() {
-	}
-	
-	public UserEntity(String email, String password) {
-		this.email = email;
-		this.password = password;
 	}
 	
 	public UserEntity(String username, String email, String password) {

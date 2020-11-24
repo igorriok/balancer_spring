@@ -2,8 +2,8 @@ package com.solonari.balancer_spring.controllers;
 
 import com.solonari.balancer_spring.dto.JwtRequest;
 import com.solonari.balancer_spring.dto.JwtResponse;
+import com.solonari.balancer_spring.security.CustomDetailsService;
 import com.solonari.balancer_spring.security.JwtTokenUtil;
-import com.solonari.balancer_spring.security.JwtUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,12 +17,18 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin
 public class JwtAuthenticationController {
 	
+	
+	private final AuthenticationManager authenticationManager;
+	private final JwtTokenUtil jwtTokenUtil;
+	private final CustomDetailsService userDetailsService;
+	
+	
 	@Autowired
-	private AuthenticationManager authenticationManager;
-	@Autowired
-	private JwtTokenUtil jwtTokenUtil;
-	@Autowired
-	private JwtUserDetailsService userDetailsService;
+	public JwtAuthenticationController(AuthenticationManager authenticationManager, JwtTokenUtil jwtTokenUtil, CustomDetailsService userDetailsService) {
+		this.authenticationManager = authenticationManager;
+		this.jwtTokenUtil = jwtTokenUtil;
+		this.userDetailsService = userDetailsService;
+	}
 	
 	
 	@RequestMapping(value = "/authenticate", method = RequestMethod.POST)
