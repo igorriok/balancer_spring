@@ -42,7 +42,7 @@ public class CustomDetailsService implements UserDetailsService {
 		
 		try {
 			userEntity = userDao.findFirstByEmail(username);
-			log.info("User Entity: {}", userEntity);
+			log.info("User Entity: {}", userEntity.toString());
 			return new User(userEntity.username, userEntity.password, grantedAuthoritiesList);
 			
 		} catch (Exception e) {

@@ -40,4 +40,15 @@ public class UserEntity implements Serializable {
 		this.email = email;
 		this.password = password;
 	}
+	
+	
+	@Override
+	public String toString() {
+		return "UserEntity{" +
+				"id=" + id +
+				", username='" + username + '\'' +
+				", email='" + email + '\'' +
+				", password='" + password + '\'' +
+				'}';
+	}
 }
