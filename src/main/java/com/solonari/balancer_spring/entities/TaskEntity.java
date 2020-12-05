@@ -13,9 +13,6 @@ public class TaskEntity {
 	@GeneratedValue
 	public Long id;
 	
-	@ManyToOne
-	public UserEntity userEntity;
-	
 	@NotBlank
 	@Size(max = 30)
 	public String name;
@@ -24,6 +21,12 @@ public class TaskEntity {
 	public LocalDateTime addedDate;
 	
 	public LocalDateTime endDate;
+	
+	@ManyToOne
+	public UserEntity user;
+	
+	@ManyToOne
+	public GroupEntity group;
 	
 	
 	public TaskEntity() {

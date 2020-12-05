@@ -20,8 +20,12 @@ public class GroupEntity {
 	public String name;
 	
 	
-	@ManyToMany(mappedBy = "groupEntityList")
-	public Set<UserEntity> userEntityList = new HashSet<>();
+	@ManyToMany(mappedBy = "groups")
+	public Set<UserEntity> users = new HashSet<>();
+	
+	
+	@OneToMany(mappedBy = "group")
+	public Set<TaskEntity> tasks = new HashSet<>();
 	
 	
 }

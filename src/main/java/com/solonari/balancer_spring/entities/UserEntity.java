@@ -33,8 +33,8 @@ public class UserEntity implements Serializable {
 	public String password;
 	
 	
-	@OneToMany(mappedBy = "userEntity")
-	public Set<TaskEntity> taskEntityList = new HashSet<>();
+	@OneToMany(mappedBy = "user")
+	public Set<TaskEntity> tasks = new HashSet<>();
 	
 	
 	@ManyToMany(cascade = {
@@ -45,7 +45,7 @@ public class UserEntity implements Serializable {
 			name = "users_groups",
 			joinColumns = @JoinColumn(name = "users_id"),
 			inverseJoinColumns = @JoinColumn(name = "groups_id"))
-	public Set<GroupEntity> groupEntityList = new HashSet<>();
+	public Set<GroupEntity> groups = new HashSet<>();
 	
 	
 	
