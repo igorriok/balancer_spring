@@ -5,6 +5,8 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(	name = "users",
@@ -14,7 +16,7 @@ import java.io.Serializable;
 public class UserEntity implements Serializable {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue
 	public Long id;
 	
 	@NotBlank
@@ -29,6 +31,21 @@ public class UserEntity implements Serializable {
 	@NotBlank
 	@Size(max = 120)
 	public String password;
+	
+	
+	@OneToMany(mappedBy = "userEntity")
+	public Set<TaskEntity> taskEntityList = new HashSet<>();
+	
+	
+	@ManyToMany(cascade = {
+			CascadeType.PERSIST,
+			CascadeType.MERGE
+	})
+	@JoinTable(
+			name = "users_groups",
+			joinColumns = @JoinColumn(name = "users_id"),
+			inverseJoinColumns = @JoinColumn(name = "groups_id"))
+	public Set<GroupEntity> groupEntityList = new HashSet<>();
 	
 	
 	
