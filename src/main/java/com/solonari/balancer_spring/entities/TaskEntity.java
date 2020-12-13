@@ -1,5 +1,7 @@
 package com.solonari.balancer_spring.entities;
 
+import org.apache.tomcat.jni.Local;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -18,7 +20,7 @@ public class TaskEntity {
 	public String name;
 	
 	@NotBlank
-	public LocalDateTime addedDate;
+	public LocalDateTime addedDate = LocalDateTime.now();
 	
 	public LocalDateTime endDate;
 	
