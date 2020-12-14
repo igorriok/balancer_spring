@@ -41,9 +41,12 @@ public class CustomDetailsService implements UserDetailsService {
 		grantedAuthoritiesList.add(new SimpleGrantedAuthority("User"));
 		
 		try {
-			userEntity = userDao.findFirstByEmail(username);
-			log.info("User Entity: {}", userEntity.toString());
-			return new User(userEntity.username, userEntity.password, grantedAuthoritiesList);
+			userEntity = userDao.findFirstByUsername(username);
+			
+			log.info("User Entity: {}", userEntity);
+			
+			return new User(
+					userEntity.username, userEntity.password, grantedAuthoritiesList);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
