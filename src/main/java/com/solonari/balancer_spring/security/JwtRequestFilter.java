@@ -20,11 +20,11 @@ import java.io.IOException;
 public class JwtRequestFilter extends OncePerRequestFilter {
 	
 	
-	private final CustomDetailsService userDetailsService;
+	private final UsersDetailsService userDetailsService;
 	private final JwtTokenUtil jwtTokenUtil;
 	
 	@Autowired
-	public JwtRequestFilter(CustomDetailsService userDetailsService, JwtTokenUtil jwtTokenUtil) {
+	public JwtRequestFilter(UsersDetailsService userDetailsService, JwtTokenUtil jwtTokenUtil) {
 		this.userDetailsService = userDetailsService;
 		this.jwtTokenUtil = jwtTokenUtil;
 	}
@@ -47,6 +47,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 				jwtToken = requestTokenHeader.substring(7);
 				try {
 					username = jwtTokenUtil.getUsernameFromToken(jwtToken);
+					logger.info("Username from token: " + username);
 				} catch (IllegalArgumentException e) {
 					System.out.println("Unable to get JWT Token");
 				} catch (ExpiredJwtException e) {

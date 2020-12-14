@@ -2,8 +2,10 @@ package com.solonari.balancer_spring.controllers;
 
 import com.solonari.balancer_spring.dto.JwtRequest;
 import com.solonari.balancer_spring.dto.JwtResponse;
-import com.solonari.balancer_spring.security.CustomDetailsService;
+import com.solonari.balancer_spring.security.UsersDetailsService;
 import com.solonari.balancer_spring.security.JwtTokenUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,13 +20,14 @@ import org.springframework.web.bind.annotation.*;
 public class JwtAuthenticationController {
 	
 	
+	private static final Logger log = LoggerFactory.getLogger(JwtAuthenticationController.class);
 	private final AuthenticationManager authenticationManager;
 	private final JwtTokenUtil jwtTokenUtil;
-	private final CustomDetailsService userDetailsService;
+	private final UsersDetailsService userDetailsService;
 	
 	
 	@Autowired
-	public JwtAuthenticationController(AuthenticationManager authenticationManager, JwtTokenUtil jwtTokenUtil, CustomDetailsService userDetailsService) {
+	public JwtAuthenticationController(AuthenticationManager authenticationManager, JwtTokenUtil jwtTokenUtil, UsersDetailsService userDetailsService) {
 		this.authenticationManager = authenticationManager;
 		this.jwtTokenUtil = jwtTokenUtil;
 		this.userDetailsService = userDetailsService;
@@ -34,9 +37,11 @@ public class JwtAuthenticationController {
 	@RequestMapping(value = "/authenticate", method = RequestMethod.POST)
 	public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
 		
-		authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
+		log.info("Authenticate: {}", authenticationRequest.toString());
 		
-		final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
+		authenticate(authenticationRequest.username, authenticationRequest.password);
+		
+		final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.username);
 		
 		final String token = jwtTokenUtil.generateToken(userDetails);
 		
@@ -45,6 +50,7 @@ public class JwtAuthenticationController {
 	
 	
 	private void authenticate(String username, String password) throws Exception {
+		
 		try {
 			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
 		} catch (DisabledException e) {

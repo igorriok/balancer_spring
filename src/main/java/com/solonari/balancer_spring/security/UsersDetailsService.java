@@ -19,39 +19,42 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class CustomDetailsService implements UserDetailsService {
+public class UsersDetailsService implements UserDetailsService {
 	
 	
-	private static final Logger log = LoggerFactory.getLogger(CustomDetailsService.class);
+	private static final Logger log = LoggerFactory.getLogger(UsersDetailsService.class);
 	
 	//@Autowired
 	private final UserDao userDao;
 	private final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 	
 	@Autowired
-	public CustomDetailsService(UserDao userDao) {
+	public UsersDetailsService(UserDao userDao) {
 		this.userDao = userDao;
 	}
 	
 	@Override
 	public User loadUserByUsername(final String username) throws UsernameNotFoundException {
 		
+		log.info("Load user by username: {}", username);
+		
 		UserEntity userEntity;
+		
 		List<GrantedAuthority> grantedAuthoritiesList = new ArrayList<>();
+		
 		grantedAuthoritiesList.add(new SimpleGrantedAuthority("User"));
 		
-		try {
-			userEntity = userDao.findFirstByUsername(username);
-			
-			log.info("User Entity: {}", userEntity);
-			
+		userEntity = userDao.findFirstByUsername(username);
+		
+		log.info("User Entity: {}", userEntity);
+		
+		if (userEntity != null) {
 			return new User(
 					userEntity.username, userEntity.password, grantedAuthoritiesList);
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new UsernameNotFoundException("User " + username + " was not found in the database");
+		} else {
+			return null;
 		}
+		
 	}
 	
 	
@@ -59,10 +62,13 @@ public class CustomDetailsService implements UserDetailsService {
 		
 		log.info("Save new user {}", emailPassword.toString());
 		
-		if (!userDao.existsByEmail(emailPassword.email)) {
+		if (!userDao.existsByUsername(emailPassword.email)) {
 			
-			userDao.save(new UserEntity(emailPassword.email.substring(0, emailPassword.email.indexOf("@")),
-					emailPassword.email, bCryptPasswordEncoder.encode(emailPassword.password)));
+			userDao.save(
+					new UserEntity(emailPassword.email,
+							bCryptPasswordEncoder.encode(emailPassword.password),
+					emailPassword.email.substring(0, emailPassword.email.indexOf("@")))
+			);
 			
 			return ResponseEntity.ok("Saved");
 		} else {

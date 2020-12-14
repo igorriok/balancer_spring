@@ -11,7 +11,7 @@ import java.util.Set;
 @Entity
 @Table(	name = "users",
 		uniqueConstraints = {
-				@UniqueConstraint(columnNames = "email")
+				@UniqueConstraint(columnNames = "username")
 		})
 public class UserEntity implements Serializable {
 	
@@ -21,12 +21,12 @@ public class UserEntity implements Serializable {
 	
 	@NotBlank
 	@Size(max = 20)
+	@Email
 	public String username;
 	
 	@NotBlank
 	@Size(max = 50)
-	@Email
-	public String email;
+	public String nickName;
 	
 	@NotBlank
 	@Size(max = 120)
@@ -52,20 +52,15 @@ public class UserEntity implements Serializable {
 	public UserEntity() {
 	}
 	
-	public UserEntity(String username, String email, String password) {
+	public UserEntity(String username, String password) {
 		this.username = username;
-		this.email = email;
 		this.password = password;
 	}
 	
-	
-	@Override
-	public String toString() {
-		return "UserEntity{" +
-				"id=" + id +
-				", username='" + username + '\'' +
-				", email='" + email + '\'' +
-				", password='" + password + '\'' +
-				'}';
+	public UserEntity(String username, String password, String nickName) {
+		this.username = username;
+		this.password = password;
+		this.nickName = nickName;
 	}
+	
 }

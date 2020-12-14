@@ -1,8 +1,7 @@
 package com.solonari.balancer_spring.controllers;
 
 import com.solonari.balancer_spring.dto.EmailPassword;
-import com.solonari.balancer_spring.entities.UserEntity;
-import com.solonari.balancer_spring.security.CustomDetailsService;
+import com.solonari.balancer_spring.security.UsersDetailsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -15,10 +14,10 @@ public class SignupController {
 	
 	private static final Logger log = LoggerFactory.getLogger(SignupController.class);
 	
-	private final CustomDetailsService customDetailsService;
+	private final UsersDetailsService usersDetailsService;
 	
-	public SignupController(CustomDetailsService customDetailsService) {
-		this.customDetailsService = customDetailsService;
+	public SignupController(UsersDetailsService usersDetailsService) {
+		this.usersDetailsService = usersDetailsService;
 	}
 	
 	
@@ -27,6 +26,6 @@ public class SignupController {
 		
 		log.info("Signup: {}", emailPassword.toString());
 		
-		return customDetailsService.saveNewUser(emailPassword);
+		return usersDetailsService.saveNewUser(emailPassword);
 	}
 }

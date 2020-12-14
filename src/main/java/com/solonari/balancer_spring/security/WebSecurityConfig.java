@@ -19,15 +19,15 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	
-	private final CustomDetailsService customDetailsService;
+	private final UsersDetailsService usersDetailsService;
 	private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 	private final JwtRequestFilter jwtRequestFilter;
 	
 	
 	@Autowired
-	public WebSecurityConfig(CustomDetailsService customDetailsService, JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint,
+	public WebSecurityConfig(UsersDetailsService usersDetailsService, JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint,
 	                         JwtRequestFilter jwtRequestFilter) {
-		this.customDetailsService = customDetailsService;
+		this.usersDetailsService = usersDetailsService;
 		this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
 		this.jwtRequestFilter = jwtRequestFilter;
 	}
@@ -38,7 +38,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		// configure AuthenticationManager so that it knows from where to load
 		// user for matching credentials
 		// Use BCryptPasswordEncoder
-		auth.userDetailsService(customDetailsService)
+		auth.userDetailsService(usersDetailsService)
 				.passwordEncoder(passwordEncoder());
 	}
 	
