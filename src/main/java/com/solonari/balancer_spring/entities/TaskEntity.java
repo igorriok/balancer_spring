@@ -1,7 +1,5 @@
 package com.solonari.balancer_spring.entities;
 
-import org.apache.tomcat.jni.Local;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -31,8 +29,23 @@ public class TaskEntity {
 	public GroupEntity group;
 	
 	
-	public TaskEntity() {
-		this.addedDate = LocalDateTime.now();
+	public TaskEntity() {}
+	
+	public TaskEntity(String name, UserEntity userEntity) {
+		this.name = name;
+		this.user = userEntity;
 	}
 	
+	
+	@Override
+	public String toString() {
+		return "TaskEntity{" +
+				"id=" + id +
+				", name='" + name + '\'' +
+				", addedDate=" + addedDate +
+				", endDate=" + endDate +
+				", user=" + user.id +
+				", group=" + group.id +
+				'}';
+	}
 }

@@ -28,4 +28,11 @@ public class GroupEntity {
 	public Set<TaskEntity> tasks = new HashSet<>();
 	
 	
+	@Override
+	public String toString() {
+		return "GroupEntity{" +
+				"id='" + id + '\'' +
+				", name='" + name + '\'' +
+				'}';
+	}
 }

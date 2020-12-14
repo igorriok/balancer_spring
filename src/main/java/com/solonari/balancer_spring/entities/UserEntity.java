@@ -63,4 +63,14 @@ public class UserEntity implements Serializable {
 		this.nickName = nickName;
 	}
 	
+	
+	@Override
+	public String toString() {
+		return "UserEntity{" +
+				"id=" + id +
+				", username='" + username + '\'' +
+				", nickName='" + nickName + '\'' +
+				", password='" + password + '\'' +
+				'}';
+	}
 }
