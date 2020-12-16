@@ -6,11 +6,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @RestController
@@ -28,12 +31,24 @@ public class TaskController {
 	@PostMapping(value = "/savetask")
 	public ResponseEntity<TaskDto> saveTask(@RequestBody TaskDto taskDto, Principal token) {
 		
-		log.info("Task is: {}", taskDto);
-		log.info("Token is: {}", token.getName());
+		log.info("Save task: {} by {}", taskDto, token.getName());
 		
 		TaskDto savedTask = new TaskDto(taskService.addTask(taskDto.taskName, token.getName(), taskDto.groupName));
 		
 		return ResponseEntity.ok().body(savedTask);
+	}
+	
+	
+	@GetMapping(value = "/tasks")
+	public ResponseEntity<List<TaskDto>> tasks(Principal token) {
+		
+		log.info("Task list for {}", token.getName());
+		
+		List<TaskDto> taskDtoList = taskService.taskList(token.getName()).stream()
+				.map((TaskDto::new))
+				.collect(Collectors.toList());
+		
+		return ResponseEntity.ok().body(taskDtoList);
 	}
 	
 }

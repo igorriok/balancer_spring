@@ -8,6 +8,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class TaskService {
 	
@@ -19,6 +21,7 @@ public class TaskService {
 		this.taskDao = taskDao;
 		this.userDao = userDao;
 	}
+	
 	
 	public TaskEntity addTask(String taskName, String username, String groupName) {
 		
@@ -33,5 +36,11 @@ public class TaskService {
 		} else {
 			throw new NullPointerException("Task name is null");
 		}
+	}
+	
+	
+	public List<TaskEntity> taskList(String username) {
+		
+		return taskDao.findAllByUser_Username(username);
 	}
 }
