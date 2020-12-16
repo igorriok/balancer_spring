@@ -6,7 +6,7 @@ public class TaskDto {
 	
 	public Long id;
 	public String taskName;
-	public String groupName;
+	public String groupName = "";
 	
 	public TaskDto() {}
 	
