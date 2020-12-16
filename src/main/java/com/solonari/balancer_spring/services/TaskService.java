@@ -23,7 +23,7 @@ public class TaskService {
 	}
 	
 	
-	public TaskEntity addTask(String taskName, String username, String groupName) {
+	public List<TaskEntity> addTask(String taskName, String username, String groupName) {
 		
 		if (taskName != null) {
 			
@@ -31,7 +31,9 @@ public class TaskService {
 			
 			log.info("UserEntity is: {}", userEntity);
 			
-			return taskDao.save(new TaskEntity(taskName, userEntity));
+			taskDao.save(new TaskEntity(taskName, userEntity));
+			
+			return getTaskListByUsername(username);
 			
 		} else {
 			throw new NullPointerException("Task name is null");
@@ -39,7 +41,7 @@ public class TaskService {
 	}
 	
 	
-	public List<TaskEntity> taskList(String username) {
+	public List<TaskEntity> getTaskListByUsername(String username) {
 		
 		return taskDao.findAllByUser_Username(username);
 	}

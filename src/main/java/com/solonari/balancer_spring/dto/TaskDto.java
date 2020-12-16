@@ -17,4 +17,14 @@ public class TaskDto {
 			this.groupName = taskEntity.group.name;
 		}
 	}
+	
+	
+	@Override
+	public String toString() {
+		return "TaskDto{" +
+				"id=" + id +
+				", taskName='" + taskName + '\'' +
+				", groupName='" + groupName + '\'' +
+				'}';
+	}
 }

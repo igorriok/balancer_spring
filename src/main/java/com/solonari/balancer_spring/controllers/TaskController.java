@@ -29,13 +29,15 @@ public class TaskController {
 	
 	
 	@PostMapping(value = "/savetask")
-	public ResponseEntity<TaskDto> saveTask(@RequestBody TaskDto taskDto, Principal token) {
+	public ResponseEntity<List<TaskDto>> saveTask(@RequestBody TaskDto taskDto, Principal token) {
 		
 		log.info("Save task: {} by {}", taskDto, token.getName());
 		
-		TaskDto savedTask = new TaskDto(taskService.addTask(taskDto.taskName, token.getName(), taskDto.groupName));
+		List<TaskDto> taskDtoList = taskService.addTask(taskDto.taskName, token.getName(), taskDto.groupName).stream()
+				.map((TaskDto::new))
+				.collect(Collectors.toList());
 		
-		return ResponseEntity.ok().body(savedTask);
+		return ResponseEntity.ok().body(taskDtoList);
 	}
 	
 	
@@ -44,7 +46,7 @@ public class TaskController {
 		
 		log.info("Task list for {}", token.getName());
 		
-		List<TaskDto> taskDtoList = taskService.taskList(token.getName()).stream()
+		List<TaskDto> taskDtoList = taskService.getTaskListByUsername(token.getName()).stream()
 				.map((TaskDto::new))
 				.collect(Collectors.toList());
 		
