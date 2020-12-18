@@ -1,39 +1,42 @@
 package com.solonari.balancer_spring.services;
 
 import com.solonari.balancer_spring.dao.TaskDao;
-import com.solonari.balancer_spring.dao.UserDao;
 import com.solonari.balancer_spring.entities.TaskEntity;
 import com.solonari.balancer_spring.entities.UserEntity;
+import com.solonari.balancer_spring.security.UsersDetailsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class TaskService {
 	
 	private static final Logger log = LoggerFactory.getLogger(TaskService.class);
 	private final TaskDao taskDao;
-	private final UserDao userDao;
+	private final UsersDetailsService usersDetailsService;
 	
-	public TaskService(TaskDao taskDao, UserDao userDao) {
+	public TaskService(TaskDao taskDao, UsersDetailsService usersDetailsService) {
 		this.taskDao = taskDao;
-		this.userDao = userDao;
+		this.usersDetailsService = usersDetailsService;
 	}
 	
 	
-	public List<TaskEntity> addTask(String taskName, String username, String groupName) {
+	public Set<TaskEntity> addTask(String taskName, String username, String groupName) {
 		
 		if (taskName != null) {
 			
-			UserEntity userEntity = userDao.findFirstByUsername(username);
+			UserEntity userEntity = usersDetailsService.getUserByUsername(username);
 			
 			log.info("UserEntity is: {}", userEntity);
 			
-			taskDao.save(new TaskEntity(taskName, userEntity));
+			userEntity = userEntity.addTask(taskName);
 			
-			return getTaskListByUsername(username);
+			userEntity = usersDetailsService.saveUser(userEntity);
+			
+			return userEntity.tasks;
 			
 		} else {
 			throw new NullPointerException("Task name is null");

@@ -75,4 +75,16 @@ public class UsersDetailsService implements UserDetailsService {
 			return ResponseEntity.badRequest().body("User already exists");
 		}
 	}
+	
+	
+	public UserEntity getUserByUsername (String username) {
+		return userDao.findFirstByUsername(username);
+	}
+	
+	
+	public UserEntity saveUser (UserEntity user) {
+		log.info("Save user entity: {}", user);
+		return userDao.save(user);
+	}
+	
 }

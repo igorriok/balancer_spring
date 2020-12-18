@@ -33,7 +33,7 @@ public class UserEntity implements Serializable {
 	public String password;
 	
 	
-	@OneToMany(mappedBy = "user")
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 	public Set<TaskEntity> tasks = new HashSet<>();
 	
 	
@@ -61,6 +61,18 @@ public class UserEntity implements Serializable {
 		this.username = username;
 		this.password = password;
 		this.nickName = nickName;
+	}
+	
+	
+	public UserEntity addTask (String taskName) {
+		tasks.add(new TaskEntity(taskName, this));
+		return this;
+	}
+	
+	
+	public UserEntity addGroup (String groupName) {
+		groups.add(new GroupEntity(groupName, this));
+		return this;
 	}
 	
 	

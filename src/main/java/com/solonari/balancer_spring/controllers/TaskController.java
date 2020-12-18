@@ -33,11 +33,15 @@ public class TaskController {
 		
 		log.info("Save task: {} by {}", taskDto, token.getName());
 		
-		List<TaskDto> taskDtoList = taskService.addTask(taskDto.taskName, token.getName(), taskDto.groupName).stream()
-				.map((TaskDto::new))
-				.collect(Collectors.toList());
-		
-		return ResponseEntity.ok().body(taskDtoList);
+		if (taskDto.taskName != null && !taskDto.taskName.equals("")) {
+			List<TaskDto> taskDtoList = taskService.addTask(taskDto.taskName, token.getName(), taskDto.groupName).stream()
+					.map((TaskDto::new))
+					.collect(Collectors.toList());
+			
+			return ResponseEntity.ok().body(taskDtoList);
+		} else {
+			return ResponseEntity.badRequest().build();
+		}
 	}
 	
 	
@@ -52,5 +56,7 @@ public class TaskController {
 		
 		return ResponseEntity.ok().body(taskDtoList);
 	}
+	
+	// TODO: Add API for groups
 	
 }

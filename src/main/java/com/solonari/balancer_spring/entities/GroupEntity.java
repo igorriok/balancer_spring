@@ -13,7 +13,7 @@ public class GroupEntity {
 	
 	@Id
 	@GeneratedValue
-	public String id;
+	public Long id;
 	
 	@NotBlank
 	@Size(max = 30)
@@ -26,6 +26,14 @@ public class GroupEntity {
 	
 	@OneToMany(mappedBy = "group")
 	public Set<TaskEntity> tasks = new HashSet<>();
+	
+	
+	public GroupEntity() {}
+	
+	public GroupEntity(String name, UserEntity userEntity) {
+		this.name = name;
+		this.users.add(userEntity);
+	}
 	
 	
 	@Override
