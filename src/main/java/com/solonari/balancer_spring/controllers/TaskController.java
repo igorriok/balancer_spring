@@ -34,7 +34,7 @@ public class TaskController {
 		log.info("Save task: {} by {}", taskDto, token.getName());
 		
 		if (taskDto.taskName != null && !taskDto.taskName.equals("")) {
-			List<TaskDto> taskDtoList = taskService.addTask(taskDto.taskName, token.getName(), taskDto.groupName).stream()
+			List<TaskDto> taskDtoList = taskService.addTask(taskDto.taskName, token.getName(), taskDto.groupId).stream()
 					.map((TaskDto::new))
 					.collect(Collectors.toList());
 			
@@ -54,9 +54,9 @@ public class TaskController {
 				.map((TaskDto::new))
 				.collect(Collectors.toList());
 		
+		log.info("Got list of tasks: {}", taskDtoList);
+		
 		return ResponseEntity.ok().body(taskDtoList);
 	}
-	
-	// TODO: Add API for groups
 	
 }

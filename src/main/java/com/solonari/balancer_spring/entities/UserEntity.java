@@ -6,6 +6,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @Entity
@@ -64,8 +65,17 @@ public class UserEntity implements Serializable {
 	}
 	
 	
-	public UserEntity addTask (String taskName) {
-		tasks.add(new TaskEntity(taskName, this));
+	public UserEntity addTask (String taskName, Long groupId) {
+		
+		TaskEntity task = new TaskEntity(taskName, this);
+		
+		Optional<GroupEntity> groupEntityOptional = this.groups.stream()
+				.filter(group -> group.id.equals(groupId))
+				.findFirst();
+		
+		groupEntityOptional.ifPresent(groupEntity -> task.group = groupEntity);
+		
+		tasks.add(task);
 		return this;
 	}
 	

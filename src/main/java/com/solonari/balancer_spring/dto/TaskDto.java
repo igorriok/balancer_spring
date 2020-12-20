@@ -6,7 +6,7 @@ public class TaskDto {
 	
 	public Long id;
 	public String taskName;
-	public String groupName = "";
+	public Long groupId = 0L;
 	
 	public TaskDto() {}
 	
@@ -14,7 +14,7 @@ public class TaskDto {
 		this.id = taskEntity.id;
 		this.taskName = taskEntity.name;
 		if (taskEntity.group != null) {
-			this.groupName = taskEntity.group.name;
+			this.groupId = taskEntity.group.id;
 		}
 	}
 	
@@ -24,7 +24,7 @@ public class TaskDto {
 		return "TaskDto{" +
 				"id=" + id +
 				", taskName='" + taskName + '\'' +
-				", groupName='" + groupName + '\'' +
+				", groupId=" + groupId +
 				'}';
 	}
 }

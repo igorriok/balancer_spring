@@ -5,6 +5,7 @@ import com.solonari.balancer_spring.services.GroupService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,5 +36,18 @@ public class GroupsController {
 				.collect(Collectors.toSet());
 		
 		return ResponseEntity.ok(groupDtoSet);
+	}
+	
+	
+	@GetMapping(value = "/groups")
+	public ResponseEntity<Set<GroupDto>> tasks(Principal token) {
+		
+		log.info("Groups for {}", token.getName());
+		
+		Set<GroupDto> taskDtoList = groupService.getGroupListByUsername(token.getName()).stream()
+				.map((GroupDto::new))
+				.collect(Collectors.toSet());
+		
+		return ResponseEntity.ok().body(taskDtoList);
 	}
 }

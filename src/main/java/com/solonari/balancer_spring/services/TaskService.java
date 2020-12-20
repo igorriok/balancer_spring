@@ -24,7 +24,7 @@ public class TaskService {
 	}
 	
 	
-	public Set<TaskEntity> addTask(String taskName, String username, String groupName) {
+	public Set<TaskEntity> addTask(String taskName, String username, Long groupId) {
 		
 		if (taskName != null) {
 			
@@ -32,7 +32,7 @@ public class TaskService {
 			
 			log.info("UserEntity is: {}", userEntity);
 			
-			userEntity = userEntity.addTask(taskName);
+			userEntity = userEntity.addTask(taskName, groupId);
 			
 			userEntity = usersDetailsService.saveUser(userEntity);
 			

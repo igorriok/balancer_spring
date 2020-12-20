@@ -33,4 +33,12 @@ public class GroupService {
 		
 		return userEntity.groups;
 	}
+	
+	
+	public Set<GroupEntity> getGroupListByUsername(String username) {
+		
+		UserEntity userEntity = usersDetailsService.getUserByUsername(username);
+		
+		return userEntity.groups;
+	}
 }
