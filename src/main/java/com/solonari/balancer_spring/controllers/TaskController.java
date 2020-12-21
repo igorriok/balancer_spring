@@ -6,13 +6,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 
@@ -55,6 +53,19 @@ public class TaskController {
 				.collect(Collectors.toList());
 		
 		log.info("Got list of tasks: {}", taskDtoList);
+		
+		return ResponseEntity.ok().body(taskDtoList);
+	}
+	
+	
+	@DeleteMapping(value = "deletetask/{id}")
+	public ResponseEntity<Set<TaskDto>> deleteTask(@PathVariable Long id, Principal principal) {
+		
+		log.info("{} delete task: {}", principal.getName(), id);
+		
+		Set<TaskDto> taskDtoList = taskService.deleteTask(id, principal.getName()).stream()
+				.map((TaskDto::new))
+				.collect(Collectors.toSet());
 		
 		return ResponseEntity.ok().body(taskDtoList);
 	}

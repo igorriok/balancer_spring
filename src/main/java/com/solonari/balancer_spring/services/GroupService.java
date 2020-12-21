@@ -41,4 +41,16 @@ public class GroupService {
 		
 		return userEntity.groups;
 	}
+	
+	
+	public Set<GroupEntity> deleteGroup(Long groupId, String username) {
+		
+		UserEntity userEntity = usersDetailsService.getUserByUsername(username);
+		
+		userEntity = userEntity.removeGroup(groupId);
+		
+		userEntity = usersDetailsService.saveUser(userEntity);
+		
+		return userEntity.groups;
+	}
 }

@@ -5,6 +5,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -76,12 +77,42 @@ public class UserEntity implements Serializable {
 		groupEntityOptional.ifPresent(groupEntity -> task.group = groupEntity);
 		
 		tasks.add(task);
+		
+		return this;
+	}
+	
+	public UserEntity removeTask (Long taskId) {
+		
+		Optional<TaskEntity> taskEntityOptional = this.tasks.stream()
+				.filter(taskEntity -> taskEntity.id.equals(taskId))
+				.findFirst();
+		
+		taskEntityOptional.ifPresent(taskEntity -> {
+			taskEntity.endDate = LocalDateTime.now();
+			taskEntity.user = null;
+			this.tasks.remove(taskEntity);
+		});
+		
 		return this;
 	}
 	
 	
 	public UserEntity addGroup (String groupName) {
 		groups.add(new GroupEntity(groupName, this));
+		return this;
+	}
+	
+	public UserEntity removeGroup (Long groupId) {
+		
+		Optional<GroupEntity> groupEntityOptional = this.groups.stream()
+				.filter(groupEntity -> groupEntity.id.equals(groupId))
+				.findFirst();
+		
+		groupEntityOptional.ifPresent(groupEntity -> {
+			this.groups.remove(groupEntity);
+			groupEntity.users.remove(this);
+		});
+		
 		return this;
 	}
 	

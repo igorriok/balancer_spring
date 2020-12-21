@@ -30,7 +30,7 @@ public class TaskService {
 			
 			UserEntity userEntity = usersDetailsService.getUserByUsername(username);
 			
-			log.info("UserEntity is: {}", userEntity);
+			//log.info("UserEntity is: {}", userEntity);
 			
 			userEntity = userEntity.addTask(taskName, groupId);
 			
@@ -47,5 +47,17 @@ public class TaskService {
 	public List<TaskEntity> getTaskListByUsername(String username) {
 		
 		return taskDao.findAllByUser_Username(username);
+	}
+	
+	
+	public Set<TaskEntity> deleteTask (Long taskId, String username) {
+		
+		UserEntity userEntity = usersDetailsService.getUserByUsername(username);
+		
+		userEntity = userEntity.removeTask(taskId);
+		
+		userEntity = usersDetailsService.saveUser(userEntity);
+		
+		return userEntity.tasks;
 	}
 }

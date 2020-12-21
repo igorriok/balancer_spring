@@ -3,6 +3,7 @@ package com.solonari.balancer_spring.entities;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -18,6 +19,10 @@ public class GroupEntity {
 	@NotBlank
 	@Size(max = 30)
 	public String name;
+	
+	@NotBlank
+	public LocalDateTime added = LocalDateTime.now();
+	
 	
 	
 	@ManyToMany(mappedBy = "groups")
