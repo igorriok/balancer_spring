@@ -10,6 +10,8 @@ public class TaskDto {
 	public String taskName;
 	public LocalDateTime addedDate;
 	public Long groupId = 0L;
+	public String groupName = "";
+	
 	
 	public TaskDto() {}
 	
@@ -19,6 +21,7 @@ public class TaskDto {
 		this.taskName = taskEntity.name;
 		if (taskEntity.group != null) {
 			this.groupId = taskEntity.group.id;
+			this.groupName = taskEntity.group.name;
 		}
 	}
 	
@@ -30,6 +33,7 @@ public class TaskDto {
 				", taskName='" + taskName + '\'' +
 				", addedDate=" + addedDate +
 				", groupId=" + groupId +
+				", groupName='" + groupName + '\'' +
 				'}';
 	}
 }
