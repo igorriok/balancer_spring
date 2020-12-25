@@ -34,7 +34,7 @@ public class JwtAuthenticationController {
 	}
 	
 	
-	@RequestMapping(value = "/authenticate", method = RequestMethod.POST)
+	@PostMapping(value = "/authenticate")
 	public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
 		
 		log.info("Authenticate: {}", authenticationRequest.toString());
