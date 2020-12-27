@@ -1,6 +1,7 @@
 package com.solonari.balancer_spring.controllers;
 
 import com.solonari.balancer_spring.dto.GroupDto;
+import com.solonari.balancer_spring.entities.GroupEntity;
 import com.solonari.balancer_spring.services.GroupService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -23,11 +25,27 @@ public class GroupsController {
 	
 	
 	@PostMapping(value = "/savegroup")
-	public ResponseEntity<Set<GroupDto>> addGroup(@RequestBody GroupDto groupDto, Principal token) {
+	public ResponseEntity<Set<GroupDto>> saveGroup(@RequestBody GroupDto groupDto, Principal token) {
 		
-		log.info("Save group: {} by {}", groupDto, token.getName());
+		log.info("Save group: {} by {}", groupDto.toString(), token.getName());
 		
-		Set<GroupDto> groupDtoSet = groupService.saveGroup(groupDto.groupName, token.getName())
+		Set<GroupDto> groupDtoSet = new HashSet<>();
+		
+		if (groupDto.id != null) {
+			
+			Set<GroupEntity> groupEntitySet = groupService.updateGroup(groupDto, token.getName());
+			
+			if (groupEntitySet != null) {
+				
+				groupDtoSet = groupEntitySet.stream()
+						.map((GroupDto::new))
+						.collect(Collectors.toSet());
+			}
+			
+			return ResponseEntity.ok(groupDtoSet);
+		}
+		
+		groupDtoSet = groupService.addGroup(groupDto.groupName, token.getName())
 				.stream()
 				.map((GroupDto::new))
 				.collect(Collectors.toSet());

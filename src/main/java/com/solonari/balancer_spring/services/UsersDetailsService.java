@@ -1,4 +1,4 @@
-package com.solonari.balancer_spring.security;
+package com.solonari.balancer_spring.services;
 
 import com.solonari.balancer_spring.dao.UserDao;
 import com.solonari.balancer_spring.dto.EmailPassword;

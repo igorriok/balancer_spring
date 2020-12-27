@@ -41,8 +41,7 @@ public class UserEntity implements Serializable {
 	
 	@ManyToMany(cascade = {
 			CascadeType.PERSIST,
-			CascadeType.MERGE
-	})
+			CascadeType.MERGE })
 	@JoinTable(
 			name = "users_groups",
 			joinColumns = @JoinColumn(name = "users_id"),
@@ -51,13 +50,7 @@ public class UserEntity implements Serializable {
 	
 	
 	
-	public UserEntity() {
-	}
-	
-	public UserEntity(String username, String password) {
-		this.username = username;
-		this.password = password;
-	}
+	public UserEntity() {}
 	
 	public UserEntity(String username, String password, String nickName) {
 		this.username = username;

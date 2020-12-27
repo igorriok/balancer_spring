@@ -1,29 +1,29 @@
 package com.solonari.balancer_spring.services;
 
-import com.solonari.balancer_spring.dao.GroupDao;
+import com.solonari.balancer_spring.dto.GroupDto;
+import com.solonari.balancer_spring.dto.ParticipantDto;
 import com.solonari.balancer_spring.entities.GroupEntity;
 import com.solonari.balancer_spring.entities.UserEntity;
-import com.solonari.balancer_spring.security.UsersDetailsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class GroupService {
 	
 	private static final Logger log = LoggerFactory.getLogger(GroupService.class);
-	private final GroupDao groupDao;
 	private final UsersDetailsService usersDetailsService;
 	
-	public GroupService(GroupDao groupDao, UsersDetailsService usersDetailsService) {
-		this.groupDao = groupDao;
+	public GroupService(UsersDetailsService usersDetailsService) {
 		this.usersDetailsService = usersDetailsService;
 	}
 	
 	
-	public Set<GroupEntity> saveGroup(String groupName, String username) {
+	public Set<GroupEntity> addGroup(String groupName, String username) {
 		
 		UserEntity userEntity = usersDetailsService.getUserByUsername(username);
 		
@@ -32,6 +32,39 @@ public class GroupService {
 		userEntity = usersDetailsService.saveUser(userEntity);
 		
 		return userEntity.groups;
+	}
+	
+	
+	public Set<GroupEntity> updateGroup(GroupDto groupDto, String username) {
+		
+		UserEntity userEntity = usersDetailsService.getUserByUsername(username);
+		
+		Optional<GroupEntity> groupEntityOptional = userEntity.groups.stream()
+				.filter((groupEntity -> groupEntity.id.equals(groupDto.id)))
+				.findFirst();
+		
+		if (groupEntityOptional.isPresent()) {
+			
+			GroupEntity groupEntity = groupEntityOptional.get();
+			
+			if (!groupEntity.name.equals(groupDto.groupName)) {
+				groupEntity.name = groupDto.groupName;
+			}
+			
+			Set<ParticipantDto> newParticipants = groupDto.participants.stream()
+					.filter(participantDto -> groupEntity.users.stream()
+						.anyMatch(user -> user.username.equals(participantDto.email)))
+					.collect(Collectors.toSet());
+			
+			log.info("new participants: {}", newParticipants.toString());
+			// TODO: save invited users
+			
+			userEntity = usersDetailsService.saveUser(userEntity);
+			
+			return userEntity.groups;
+		} else {
+			return null;
+		}
 	}
 	
 	
@@ -53,4 +86,17 @@ public class GroupService {
 		
 		return userEntity.groups;
 	}
+	
+	
+	public GroupEntity getGroupById(Long id, String username) {
+		
+		UserEntity userEntity = usersDetailsService.getUserByUsername(username);
+		
+		Optional<GroupEntity> groupEntityOptional = userEntity.groups.stream()
+				.filter((groupEntity -> groupEntity.id.equals(id)))
+				.findFirst();
+		
+		return groupEntityOptional.orElse(null);
+	}
+	
 }

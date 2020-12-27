@@ -1,5 +1,6 @@
 package com.solonari.balancer_spring.security;
 
+import com.solonari.balancer_spring.services.UsersDetailsService;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

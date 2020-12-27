@@ -1,7 +1,7 @@
 package com.solonari.balancer_spring.controllers;
 
 import com.solonari.balancer_spring.dto.EmailPassword;
-import com.solonari.balancer_spring.security.UsersDetailsService;
+import com.solonari.balancer_spring.services.UsersDetailsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;

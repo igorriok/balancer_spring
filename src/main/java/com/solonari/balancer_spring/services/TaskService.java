@@ -3,7 +3,6 @@ package com.solonari.balancer_spring.services;
 import com.solonari.balancer_spring.dao.TaskDao;
 import com.solonari.balancer_spring.entities.TaskEntity;
 import com.solonari.balancer_spring.entities.UserEntity;
-import com.solonari.balancer_spring.security.UsersDetailsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;

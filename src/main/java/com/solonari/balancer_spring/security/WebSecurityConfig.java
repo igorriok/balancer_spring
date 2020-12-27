@@ -1,5 +1,6 @@
 package com.solonari.balancer_spring.security;
 
+import com.solonari.balancer_spring.services.UsersDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

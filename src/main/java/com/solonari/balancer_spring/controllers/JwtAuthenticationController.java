@@ -2,7 +2,7 @@ package com.solonari.balancer_spring.controllers;
 
 import com.solonari.balancer_spring.dto.JwtRequest;
 import com.solonari.balancer_spring.dto.JwtResponse;
-import com.solonari.balancer_spring.security.UsersDetailsService;
+import com.solonari.balancer_spring.services.UsersDetailsService;
 import com.solonari.balancer_spring.security.JwtTokenUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

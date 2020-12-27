@@ -22,4 +22,13 @@ public class GroupDto {
 				.map(ParticipantDto::new)
 				.collect(Collectors.toSet());
 	}
+	
+	@Override
+	public String toString() {
+		return "GroupDto{" +
+				"id=" + id +
+				", groupName='" + groupName + '\'' +
+				", participants=" + participants +
+				'}';
+	}
 }

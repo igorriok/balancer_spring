@@ -19,4 +19,13 @@ public class ParticipantDto {
 		this.nickName = userEntity.nickName;
 		this.email = userEntity.username;
 	}
+	
+	
+	@Override
+	public String toString() {
+		return "ParticipantDto{" +
+				"nickName='" + nickName + '\'' +
+				", email='" + email + '\'' +
+				'}';
+	}
 }
