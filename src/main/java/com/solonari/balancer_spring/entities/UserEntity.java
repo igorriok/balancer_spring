@@ -34,6 +34,10 @@ public class UserEntity implements Serializable {
 	@Size(max = 120)
 	public String password;
 	
+	@NotBlank
+	@Size(max = 30)
+	public String status;
+	
 	
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 	public Set<TaskEntity> tasks = new HashSet<>();
@@ -56,8 +60,15 @@ public class UserEntity implements Serializable {
 		this.username = username;
 		this.password = password;
 		this.nickName = nickName;
+		this.status = "active";
 	}
 	
+	public UserEntity(String username, String password, String nickName, String status) {
+		this.username = username;
+		this.password = password;
+		this.nickName = nickName;
+		this.status = status;
+	}
 	
 	public UserEntity addTask (String taskName, Long groupId) {
 		
@@ -90,10 +101,11 @@ public class UserEntity implements Serializable {
 	}
 	
 	
-	public UserEntity addGroup (String groupName) {
+	public UserEntity createGroup(String groupName) {
 		groups.add(new GroupEntity(groupName, this));
 		return this;
 	}
+	
 	
 	public UserEntity removeGroup (Long groupId) {
 		

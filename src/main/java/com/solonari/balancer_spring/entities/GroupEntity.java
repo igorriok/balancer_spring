@@ -40,6 +40,10 @@ public class GroupEntity {
 		this.users.add(userEntity);
 	}
 	
+	public GroupEntity addUser(UserEntity userEntity) {
+		this.users.add(userEntity);
+		return this;
+	}
 	
 	@Override
 	public String toString() {

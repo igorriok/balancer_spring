@@ -15,8 +15,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 @Service
 public class UsersDetailsService implements UserDetailsService {
@@ -34,9 +36,9 @@ public class UsersDetailsService implements UserDetailsService {
 	}
 	
 	@Override
-	public User loadUserByUsername(final String username) throws UsernameNotFoundException {
+	public User loadUserByUsername(final String email) throws UsernameNotFoundException {
 		
-		log.info("Load user by username: {}", username);
+		log.info("Load user by email: {}", email);
 		
 		UserEntity userEntity;
 		
@@ -44,17 +46,28 @@ public class UsersDetailsService implements UserDetailsService {
 		
 		grantedAuthoritiesList.add(new SimpleGrantedAuthority("User"));
 		
-		userEntity = userDao.findFirstByUsername(username);
+		userEntity = userDao.findFirstByUsername(email);
 		
 		log.info("User Entity: {}", userEntity);
 		
 		if (userEntity != null) {
-			return new User(
-					userEntity.username, userEntity.password, grantedAuthoritiesList);
+			return new User(userEntity.username, userEntity.password, grantedAuthoritiesList);
 		} else {
 			return null;
 		}
 		
+	}
+	
+	
+	public UserEntity getUserEntity(String email) {
+		
+		log.info("Get user entity by email: {}", email);
+		
+		if (email != null) {
+			return userDao.findFirstByUsername(email);
+		} else {
+			return null;
+		}
 	}
 	
 	
@@ -77,8 +90,29 @@ public class UsersDetailsService implements UserDetailsService {
 	}
 	
 	
-	public UserEntity getUserByUsername (String username) {
-		return userDao.findFirstByUsername(username);
+	public UserEntity addInvitedUser(String email) {
+		
+		log.info("Add invited user {}", email);
+		
+		if (!userDao.existsByUsername(email)) {
+			
+			byte[] array = new byte[7];
+			new Random().nextBytes(array);
+			String generatedString = new String(array, StandardCharsets.UTF_8);
+			
+			return userDao.save(
+					new UserEntity(email,
+							bCryptPasswordEncoder.encode(generatedString),
+							email.substring(0, email.indexOf("@")), "invited")
+			);
+		} else {
+			return userDao.findFirstByUsername(email);
+		}
+	}
+	
+	
+	public UserEntity getUserByUsername (String email) {
+		return userDao.findFirstByUsername(email);
 	}
 	
 	
@@ -87,4 +121,7 @@ public class UsersDetailsService implements UserDetailsService {
 		return userDao.save(user);
 	}
 	
+	public boolean userExists (String email) {
+		return userDao.existsByUsername(email);
+	}
 }

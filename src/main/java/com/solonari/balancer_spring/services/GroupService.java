@@ -27,7 +27,7 @@ public class GroupService {
 		
 		UserEntity userEntity = usersDetailsService.getUserByUsername(username);
 		
-		userEntity = userEntity.addGroup(groupName);
+		userEntity = userEntity.createGroup(groupName);
 		
 		userEntity = usersDetailsService.saveUser(userEntity);
 		
@@ -51,13 +51,21 @@ public class GroupService {
 				groupEntity.name = groupDto.groupName;
 			}
 			
+			// find new participants
 			Set<ParticipantDto> newParticipants = groupDto.participants.stream()
 					.filter(participantDto -> groupEntity.users.stream()
 						.anyMatch(user -> user.username.equals(participantDto.email)))
 					.collect(Collectors.toSet());
 			
 			log.info("new participants: {}", newParticipants.toString());
-			// TODO: save invited users
+			
+			//save invited users and add to group
+			newParticipants.forEach(participantDto -> {
+				
+				UserEntity participantUser = usersDetailsService.addInvitedUser(participantDto.email);
+				
+				groupEntity.addUser(participantUser);
+			});
 			
 			userEntity = usersDetailsService.saveUser(userEntity);
 			

@@ -7,7 +7,7 @@ public interface UserDao extends JpaRepository<UserEntity, Integer> {
 
 	UserEntity findFirstByNickName(String email);
 	
-	UserEntity findFirstByUsername(String username);
+	UserEntity findFirstByUsername(String email);
 	
 	boolean existsByUsername(String email);
 }
