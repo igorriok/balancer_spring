@@ -54,7 +54,7 @@ public class GroupService {
 			// find new participants
 			Set<ParticipantDto> newParticipants = groupDto.participants.stream()
 					.filter(participantDto -> groupEntity.users.stream()
-						.anyMatch(user -> user.username.equals(participantDto.email)))
+						.anyMatch(user -> !user.username.equals(participantDto.email)))
 					.collect(Collectors.toSet());
 			
 			log.info("new participants: {}", newParticipants.toString());
@@ -65,6 +65,8 @@ public class GroupService {
 				UserEntity participantUser = usersDetailsService.addInvitedUser(participantDto.email);
 				
 				groupEntity.addUser(participantUser);
+				
+				// TODO: send email with invitation
 			});
 			
 			userEntity = usersDetailsService.saveUser(userEntity);
